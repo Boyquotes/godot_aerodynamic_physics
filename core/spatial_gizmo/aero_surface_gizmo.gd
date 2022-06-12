@@ -1,26 +1,28 @@
-tool
-extends EditorSpatialGizmoPlugin
+@tool
+extends EditorNode3DGizmoPlugin
 
 var wing_opacity : float = 0.2
-var wing_material := SpatialMaterial.new()
+var wing_material := StandardMaterial3D.new()
 var wing_color := Color(1, 1, 1, wing_opacity)
 var flap_color := Color(1, 1, 0, wing_opacity)
 
 func _init():
 	wing_material.flags_unshaded = true
 	wing_material.flags_transparent = true
-	wing_material.set_cull_mode(SpatialMaterial.CULL_DISABLED)
+	wing_material.cull_mode = BaseMaterial3D.CULL_DISABLED
 #	wing_material.albedo_color = Color(1.0, 1.0, 1.0, 0.3)
 	wing_material.vertex_color_use_as_albedo = true
 	wing_material.flags_no_depth_test = true
 	
 #	create_material("main", Color(1, 0, 0))
-	
 
-func has_gizmo(spatial : Spatial) -> bool:
-	return spatial is AeroSurface
+func _get_gizmo_name() -> String:
+	return "AeroSurfaceGizmo"
 
-func redraw(gizmo : EditorSpatialGizmo) -> void:
+func has_gizmo(node3d : Node3D) -> bool:
+	return node3d is AeroSurface3D
+
+func _redraw(gizmo : EditorNode3DGizmo) -> void:
 	gizmo.clear()
 	var spatial = gizmo.get_spatial_node()
 	
@@ -79,12 +81,8 @@ func redraw(gizmo : EditorSpatialGizmo) -> void:
 	st.add_color(wing_color)
 	st.add_vertex(br)
 	
-
-	
-	
-	
 #	var mesh : Mesh = Mesh
-	gizmo.add_mesh(st.commit(), false, null, wing_material)
+	gizmo.add_mesh(st.commit(), wing_material)
 	
 #	gizmo.add_lines(lines, get_material("main", gizmo), false)
 #	gizmo.add_handles(handles, get_material("handles", gizmo))
