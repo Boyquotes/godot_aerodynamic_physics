@@ -55,7 +55,7 @@ func calculate_aerodynamic_forces(vel : Vector3, ang_vel : Vector3, wind : Vecto
 	for surface in aero_surfaces:
 		var relative_position : Vector3 = global_transform.basis * surface.transform.origin
 		#ang_vel.cross(transform.origin) might cause errors, not sure if unity does transforms the same as godot
-		var force_and_torque : Array[Vector3] = surface.calculate_forces(-vel + wind - (ang_vel.cross(relative_position)), air_density, relative_position)
+		var force_and_torque : PackedVector3Array = surface.calculate_forces(-vel + wind - (ang_vel.cross(relative_position)), air_density, relative_position)
 		
 		force += force_and_torque[0]
 		torque += force_and_torque[1]

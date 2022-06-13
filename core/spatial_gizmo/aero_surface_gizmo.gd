@@ -2,7 +2,7 @@
 extends EditorNode3DGizmoPlugin
 
 var wing_opacity : float = 0.2
-var wing_material := StandardMaterial3D.new()
+var wing_material := BaseMaterial3D.new()
 var wing_color := Color(1, 1, 1, wing_opacity)
 var flap_color := Color(1, 1, 0, wing_opacity)
 
