@@ -23,7 +23,6 @@ func has_gizmo(node3d : Node3D) -> bool:
 	return node3d is AeroSurface3D
 
 func _redraw(gizmo : EditorNode3DGizmo) -> void:
-	print(1)
 	gizmo.clear()
 	var spatial = gizmo.get_spatial_node()
 	
