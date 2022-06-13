@@ -59,7 +59,7 @@ var _current_lift : Vector3
 var _current_drag : Vector3
 var _current_torque : Vector3
 
-func calculate_forces(world_air_velocity : Vector3, air_density : float, relative_position : Vector3) -> Array[Vector3]:
+func calculate_forces(world_air_velocity : Vector3, air_density : float, relative_position : Vector3) -> PackedVector3Array:
 	var force := Vector3.ZERO
 	var torque := Vector3.ZERO
 	
@@ -102,8 +102,7 @@ func calculate_forces(world_air_velocity : Vector3, air_density : float, relativ
 	_current_drag = drag
 	_current_torque = torque
 	
-	var array : Array[Vector3] = [force, torque]
-	return array
+	return PackedVector3Array([force, torque])
 
 func flap_effectiveness_correction(flap_angle : float = 0.0) -> float:
 	return lerp(0.8, 0.4, (rad2deg(abs(flap_angle)) - 10.0) / 50.0)

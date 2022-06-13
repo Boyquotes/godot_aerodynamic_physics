@@ -26,14 +26,14 @@ func _integrate_forces(state : PhysicsDirectBodyState3D) -> void:
 	apply_central_impulse(total_force_and_torque[0] * get_physics_process_delta_time())
 	apply_torque_impulse(total_force_and_torque[1] * get_physics_process_delta_time())
 
-func calculate_forces(state : PhysicsDirectBodyState3D) -> Array[Vector3]:
+func calculate_forces(state : PhysicsDirectBodyState3D) -> PackedVector3Array:
 	var last_force_and_torque := calculate_aerodynamic_forces(linear_velocity, angular_velocity, Vector3.ZERO, 1.2, global_transform.origin)
 	var total_force_and_torque := last_force_and_torque
 	
 	for i in SUBSTEPS:
 		var velocity_prediction : Vector3 = predict_velocity(last_force_and_torque[0] + state.total_gravity * mass)
 		var angular_velocity_prediction : Vector3 = predict_angular_velocity(last_force_and_torque[1])
-		var force_and_torque_prediction : Array[Vector3] = calculate_aerodynamic_forces(velocity_prediction, angular_velocity_prediction, Vector3.ZERO, 1.2, global_transform.origin)
+		var force_and_torque_prediction : PackedVector3Array = calculate_aerodynamic_forces(velocity_prediction, angular_velocity_prediction, Vector3.ZERO, 1.2, global_transform.origin)
 		#add to total forces
 		total_force_and_torque[0] += force_and_torque_prediction[0]
 		total_force_and_torque[1] += force_and_torque_prediction[1]
@@ -48,7 +48,7 @@ static func v3_clamp_length(v : Vector3, length : float) -> Vector3:
 
 	return v.normalized() * min(length, v.length())
 
-func calculate_aerodynamic_forces(vel : Vector3, ang_vel : Vector3, wind : Vector3, air_density : float, center_of_mass : Vector3) -> Array[Vector3]:
+func calculate_aerodynamic_forces(vel : Vector3, ang_vel : Vector3, wind : Vector3, air_density : float, center_of_mass : Vector3) -> PackedVector3Array:
 	var force : Vector3
 	var torque : Vector3
 	
@@ -60,8 +60,7 @@ func calculate_aerodynamic_forces(vel : Vector3, ang_vel : Vector3, wind : Vecto
 		force += force_and_torque[0]
 		torque += force_and_torque[1]
 	
-	var array : Array[Vector3] = [force, torque]
-	return array
+	return PackedVector3Array([force, torque])
 
 func predict_velocity(force : Vector3) -> Vector3:
 	return linear_velocity + get_physics_process_delta_time() * PREDICTION_TIMESTEP_FRACTION * force / mass
