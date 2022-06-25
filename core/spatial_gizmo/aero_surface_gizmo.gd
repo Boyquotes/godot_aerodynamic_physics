@@ -36,10 +36,10 @@ func _redraw(gizmo : EditorNode3DGizmo) -> void:
 	
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	#flap section
-	var tl := Vector3(-half_span, 0, half_chord - axis_z + quater_chord).rotated(Vector3(-1, 0, 0), flap_angle)
-	var tr := Vector3(half_span, 0, half_chord - axis_z + quater_chord).rotated(Vector3(-1, 0, 0), flap_angle)
-	tl.z += axis_z
-	tr.z += axis_z
+	var tl := Vector3(-half_span, 0, half_chord - axis_z).rotated(Vector3(-1, 0, 0), flap_angle)
+	var tr := Vector3(half_span, 0, half_chord - axis_z).rotated(Vector3(-1, 0, 0), flap_angle)
+	tl.z += axis_z + quater_chord
+	tr.z += axis_z + quater_chord
 	var bl := Vector3(-half_span, 0, axis_z + quater_chord)
 	var br := Vector3(half_span, 0, axis_z + quater_chord)
 	
