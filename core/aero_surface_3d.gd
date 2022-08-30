@@ -24,7 +24,7 @@ var is_control_surface : bool = false
 		update_config()
 @export var flap_angle : float = 0.0 :
 	set(value):
-		flap_angle = clamp(value, -deg2rad(50.0), deg2rad(50.0))
+		flap_angle = clamp(value, -deg_to_rad(50.0), deg_to_rad(50.0))
 		update_config()
 @export var flap_fraction : float = 0.0 :
 	set(value):
@@ -67,10 +67,10 @@ func calculate_forces(world_air_velocity : Vector3, air_density : float, relativ
 	var theta : float = acos(2.0 * config.flap_fraction - 1.0)
 	var flap_effectiveness : float = 1.0 - (theta - sin(theta)) / PI
 	var delta_lift : float = corrected_lift_slope * flap_effectiveness * flap_effectiveness_correction(flap_angle) * flap_angle
-	var zero_lift_aoa_base : float = deg2rad(config.zero_lift_aoa)
+	var zero_lift_aoa_base : float = deg_to_rad(config.zero_lift_aoa)
 	var zero_lift_aoa : float = zero_lift_aoa_base - delta_lift / corrected_lift_slope
-	var stall_angle_high_base : float = deg2rad(config.stall_angle_high)
-	var stall_angle_low_base : float = deg2rad(config.stall_angle_low)
+	var stall_angle_high_base : float = deg_to_rad(config.stall_angle_high)
+	var stall_angle_low_base : float = deg_to_rad(config.stall_angle_low)
 	var cl_max_high : float = corrected_lift_slope * (stall_angle_high_base - zero_lift_aoa_base) + delta_lift * lift_coefficient_max_friction(config.flap_fraction)
 	var cl_max_low : float = corrected_lift_slope * (stall_angle_low_base - zero_lift_aoa_base) + delta_lift * lift_coefficient_max_friction(config.flap_fraction)
 	var stall_angle_high = zero_lift_aoa + cl_max_high / corrected_lift_slope
@@ -105,7 +105,7 @@ func calculate_forces(world_air_velocity : Vector3, air_density : float, relativ
 	return PackedVector3Array([force, torque])
 
 func flap_effectiveness_correction(flap_angle : float = 0.0) -> float:
-	return lerp(0.8, 0.4, (rad2deg(abs(flap_angle)) - 10.0) / 50.0)
+	return lerp(0.8, 0.4, (rad_to_deg(abs(flap_angle)) - 10.0) / 50.0)
 
 func lift_coefficient_max_friction(fraction : float = 0.0) -> float:
 	return clamp(1.0 - 0.5 * (fraction - 0.1) / 0.3, 0, 1)
@@ -113,8 +113,8 @@ func lift_coefficient_max_friction(fraction : float = 0.0) -> float:
 func calculate_coefficients(angle_of_attack : float, corrected_lift_slope : float, zero_lift_aoa : float, stall_angle_high : float, stall_angle_low : float) -> Vector3:
 	var aerodynamic_coefficients : Vector3
 	
-	var padding_angle_high : float = deg2rad(lerp(15.0, 5.0, rad2deg(flap_angle + 50.0) / 100.0))
-	var padding_angle_low : float = deg2rad(lerp(15.0, 5.0, -rad2deg(flap_angle + 50.0) / 100.0))
+	var padding_angle_high : float = deg_to_rad(lerp(15.0, 5.0, rad_to_deg(flap_angle + 50.0) / 100.0))
+	var padding_angle_low : float = deg_to_rad(lerp(15.0, 5.0, -rad_to_deg(flap_angle + 50.0) / 100.0))
 	var padded_stall_angle_high : float = stall_angle_high + padding_angle_high
 	var padded_stall_angle_low : float = stall_angle_low + padding_angle_low
 	
